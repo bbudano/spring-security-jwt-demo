@@ -1,6 +1,9 @@
 package com.example.springsecurityjwtdemo.service;
 
+import com.example.springsecurityjwtdemo.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -14,9 +17,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TokenService {
+public class AuthService {
 
     private final JwtEncoder jwtEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    public Authentication authenticateUser(LoginRequest loginRequest) {
+        var usernamePasswordToken = new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password());
+        return authenticationManager.authenticate(usernamePasswordToken);
+    }
 
     public String generateToken(Authentication authentication) {
         var now = Instant.now();
