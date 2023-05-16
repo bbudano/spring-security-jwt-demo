@@ -38,3 +38,20 @@ role: ROLE_USER
 username: user
 password: user
 ```
+
+### Login
+```
+curl -d "{\"username\":\"admin\", \"password\":\"admin\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/auth/token
+```
+
+This will return a JWT. Add it to the Authorization header to access protected resources:
+
+```
+curl -H "Authorization: Bearer <YOUR_JWT>" http://localhost:8080/hello
+```
+
+You should see this response:
+
+```
+Hello, admin
+```
