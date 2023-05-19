@@ -1,6 +1,7 @@
 package com.example.springsecurityjwtdemo.service;
 
 import com.example.springsecurityjwtdemo.dto.LoginRequest;
+import com.example.springsecurityjwtdemo.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
@@ -27,8 +29,9 @@ public class AuthService {
         return authenticationManager.authenticate(usernamePasswordToken);
     }
 
-    public String generateToken(Authentication authentication) {
+    public TokenResponse generateToken(Authentication authentication) {
         var now = Instant.now();
+        var expiresAt = now.plus(1, ChronoUnit.HOURS);
 
         var scope = authentication
                 .getAuthorities()
@@ -40,14 +43,16 @@ public class AuthService {
                 .builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(expiresAt)
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();
 
-        return jwtEncoder
+        var accessToken = jwtEncoder
                 .encode(JwtEncoderParameters.from(claims))
                 .getTokenValue();
+
+        return new TokenResponse(accessToken, Duration.between(now, expiresAt).toSeconds());
     }
 
 }

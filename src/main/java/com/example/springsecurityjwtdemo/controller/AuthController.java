@@ -1,6 +1,7 @@
 package com.example.springsecurityjwtdemo.controller;
 
 import com.example.springsecurityjwtdemo.dto.LoginRequest;
+import com.example.springsecurityjwtdemo.dto.TokenResponse;
 import com.example.springsecurityjwtdemo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/token")
-    public String token(@RequestBody LoginRequest loginRequest) {
+    public TokenResponse token(@RequestBody LoginRequest loginRequest) {
         var authentication = authService.authenticateUser(loginRequest);
         return authService.generateToken(authentication);
     }
