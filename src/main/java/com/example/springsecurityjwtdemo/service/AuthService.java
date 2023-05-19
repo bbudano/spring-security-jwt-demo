@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -52,7 +53,10 @@ public class AuthService {
                 .encode(JwtEncoderParameters.from(claims))
                 .getTokenValue();
 
-        return new TokenResponse(accessToken, Duration.between(now, expiresAt).toSeconds());
+        return new TokenResponse(
+                accessToken,
+                OAuth2AccessToken.TokenType.BEARER.getValue(),
+                Duration.between(now, expiresAt).toSeconds());
     }
 
 }
