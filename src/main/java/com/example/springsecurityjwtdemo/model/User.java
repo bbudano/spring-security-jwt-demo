@@ -20,14 +20,14 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Scope scope;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(scope.name()));
     }
 
     @Override
@@ -60,10 +60,10 @@ public class User implements UserDetails {
         return Status.ACTIVE.equals(this.status);
     }
 
-    public enum Role {
+    public enum Scope {
 
-        ROLE_ADMIN,
-        ROLE_USER
+        ADMIN,
+        USER
 
     }
 

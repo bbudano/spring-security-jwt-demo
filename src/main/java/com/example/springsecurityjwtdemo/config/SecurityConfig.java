@@ -52,6 +52,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/protected/admin").hasAuthority("SCOPE_ADMIN")
                         .requestMatchers("/api/v1/auth/token").permitAll()
                         .anyRequest().authenticated()
                 )
