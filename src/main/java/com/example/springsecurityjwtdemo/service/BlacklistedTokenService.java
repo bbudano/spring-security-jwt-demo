@@ -11,7 +11,7 @@ public class BlacklistedTokenService {
 
     private final BlacklistedTokenRepository blacklistedTokenRepository;
 
-    private BlacklistedToken blacklistToken(String val) {
+    public BlacklistedToken blacklistToken(String val) {
         var blacklistedToken = new BlacklistedToken(val);
         return blacklistedTokenRepository.save(blacklistedToken);
     }
