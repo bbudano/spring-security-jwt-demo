@@ -1,10 +1,5 @@
 package com.example.springsecurityjwtdemo.config;
 
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,18 +14,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final RSAKeyProperties rsaKeyProperties;
+    private final JwtFilter jwtFilter;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -58,28 +50,8 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder
-                .withPublicKey(rsaKeyProperties.publicKey())
-                .build();
-    }
-
-    @Bean
-    JwtEncoder jwtEncoder() {
-        var jwk = new RSAKey
-                .Builder(rsaKeyProperties.publicKey())
-                .privateKey(rsaKeyProperties.privateKey())
-                .build();
-
-        var jwkSet = new JWKSet(jwk);
-
-        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(jwkSet);
-
-        return new NimbusJwtEncoder(jwks);
     }
 
 }

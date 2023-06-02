@@ -11,6 +11,10 @@ public class BlacklistedTokenService {
 
     private final BlacklistedTokenRepository blacklistedTokenRepository;
 
+    public boolean existsByJti(String jti) {
+        return blacklistedTokenRepository.existsByJti(jti);
+    }
+
     public BlacklistedToken blacklistToken(String jti) {
         var blacklistedToken = new BlacklistedToken(jti);
 
