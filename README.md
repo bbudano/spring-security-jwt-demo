@@ -47,11 +47,11 @@ curl -d "{\"username\":\"admin\", \"password\":\"admin\"}" -H "Content-Type: app
 This will return a JWT. Add it to the Authorization header to access protected resources:
 
 ```
-curl -H "Authorization: Bearer <YOUR_JWT>" http://localhost:8080/hello
+curl -H "Authorization: Bearer <YOUR_JWT>" http://localhost:8080/protected
 ```
 
 You should see this response:
 
 ```
-Hello, admin
+This is a protected resource
 ```
