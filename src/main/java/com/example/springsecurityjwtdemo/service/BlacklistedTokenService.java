@@ -15,10 +15,9 @@ public class BlacklistedTokenService {
         return blacklistedTokenRepository.existsByJti(jti);
     }
 
-    public BlacklistedToken blacklistToken(String jti) {
+    public void blacklistToken(String jti) {
         var blacklistedToken = new BlacklistedToken(jti);
-
-        return blacklistedTokenRepository.saveAndFlush(blacklistedToken);
+        blacklistedTokenRepository.saveAndFlush(blacklistedToken);
     }
 
 }
