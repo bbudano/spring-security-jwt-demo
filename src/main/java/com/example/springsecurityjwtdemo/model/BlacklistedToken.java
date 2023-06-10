@@ -1,9 +1,6 @@
 package com.example.springsecurityjwtdemo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +8,7 @@ import java.time.ZonedDateTime;
 
 @Data
 @Entity
-@Table(name = "blacklisted_tokens")
+@Table(name = "blacklisted_tokens", uniqueConstraints = { @UniqueConstraint(name = "jti_unique", columnNames = { "jti" }) })
 @NoArgsConstructor
 public class BlacklistedToken {
 
