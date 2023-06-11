@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
+
 @Data
 @Entity
 @Table(name = "blacklisted_tokens")
@@ -18,6 +20,8 @@ public class BlacklistedToken {
     private Long id;
 
     private String jti;
+
+    private ZonedDateTime blacklistedAt = ZonedDateTime.now();
 
     public BlacklistedToken(String jti) {
         this.jti = jti;
